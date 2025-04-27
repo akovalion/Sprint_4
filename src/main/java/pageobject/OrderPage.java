@@ -3,15 +3,23 @@ package pageobject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 public class OrderPage {
     private WebDriver driver;
+    private final Duration TIMEOUT = Duration.ofSeconds(10);
+
+    // Локаторы полей первой формы
     private By nameInput = By.xpath("//input[@placeholder='* Имя']");
     private By surnameInput = By.xpath("//input[@placeholder='* Фамилия']");
     private By addressInput = By.xpath("//input[@placeholder='* Адрес: куда привезти заказ']");
     private By stationInput = By.className("select-search__input");
     private By phoneInput = By.xpath("//input[@placeholder='* Телефон: на него позвонит курьер']");
     private By nextButton = By.xpath("//button[text()='Далее']");
+
+    // Локаторы полей второй формы
     private By dateInput = By.xpath("//input[@placeholder='* Когда привезти самокат']");
     private By rentalPeriodDropdown = By.className("Dropdown-placeholder");
     private By rentalPeriodOption = By.xpath("//div[contains(text(),'четверо суток')]");
@@ -19,6 +27,9 @@ public class OrderPage {
     private By commentInput = By.xpath("//input[@placeholder='Комментарий для курьера']");
     private By finalOrderButton = By.xpath("//button[text()='Заказать']");
     private By confirmYesButton = By.xpath("//button[text()='Да']");
+
+    // Новый локатор для проверки успешного заказа
+    private final By orderSuccessModal = By.xpath("//div[contains(text(),'Заказ оформлен')]");
 
     public OrderPage(WebDriver driver) {
         this.driver = driver;
@@ -42,5 +53,11 @@ public class OrderPage {
         driver.findElement(commentInput).sendKeys(comment);
         driver.findElement(finalOrderButton).click();
         driver.findElement(confirmYesButton).click();
+    }
+
+    // Новый метод: проверка успешного оформления заказа
+    public boolean isOrderSuccessful() {
+        WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(orderSuccessModal)).isDisplayed();
     }
 }

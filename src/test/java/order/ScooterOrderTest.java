@@ -14,6 +14,8 @@ import pageobject.OrderPage;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.junit.Assert.assertTrue;
+
 @RunWith(Parameterized.class)
 public class ScooterOrderTest {
     private WebDriver driver;
@@ -67,6 +69,9 @@ public class ScooterOrderTest {
         orderPage = new OrderPage(driver);
         orderPage.fillFirstForm(name, surname, address, station, phone);
         orderPage.fillSecondForm(date, comment);
+
+        // Добавленный ассерт
+        assertTrue("Заказ не был оформлен!", orderPage.isOrderSuccessful());
     }
 
     @After
