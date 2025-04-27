@@ -1,5 +1,6 @@
 package order;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import pageobject.MainPage;
 import pageobject.OrderPage;
 
@@ -22,6 +22,7 @@ public class ScooterOrderTest {
     private MainPage mainPage;
     private OrderPage orderPage;
 
+    // Параметры теста
     private final String name;
     private final String surname;
     private final String address;
@@ -31,6 +32,7 @@ public class ScooterOrderTest {
     private final String comment;
     private final boolean clickTopButton;
 
+    // Конструктор теста
     public ScooterOrderTest(String name, String surname, String address, String station, String phone, String date, String comment, boolean clickTopButton) {
         this.name = name;
         this.surname = surname;
@@ -42,6 +44,7 @@ public class ScooterOrderTest {
         this.clickTopButton = clickTopButton;
     }
 
+    // Данные для параметризации
     @Parameterized.Parameters
     public static Collection<Object[]> testData() {
         return Arrays.asList(new Object[][]{
@@ -66,11 +69,12 @@ public class ScooterOrderTest {
         } else {
             mainPage.clickBottomOrderButton();
         }
+
         orderPage = new OrderPage(driver);
         orderPage.fillFirstForm(name, surname, address, station, phone);
         orderPage.fillSecondForm(date, comment);
 
-        // Добавленный ассерт
+        // Проверка успешного оформления заказа
         assertTrue("Заказ не был оформлен!", orderPage.isOrderSuccessful());
     }
 
